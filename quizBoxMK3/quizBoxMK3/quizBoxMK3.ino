@@ -169,13 +169,12 @@ void ARDUINO_ISR_ATTR isrH6() { // Yellow 3
 
 void ARDUINO_ISR_ATTR isrH7() { // Clear Handle
   if (!buzzed) {
-    handle7.pressed = true;
-    buzzed = true;
     first = 7;
-    timerWrite(speedTimer, 0);
-    timerStart(speedTimer);
+    
+    
   } else {
-    handle7.SPEED = timerRead(speedTimer);
+    isrCounter = 0;
+    timerStop(timer);
   }
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -330,11 +329,132 @@ void buzz(uint8_t x) {
           pixels.setPixelColor(pixelsOn, pixels.Color(0, 0, 0));
           pixels.show();
         } else if (pixelsOn == 0){ // After all the pixels are off (Times up)
-          buzzed = false; // Exit buzzed state
+          
           timerOn = false; // Timer is no longer running
           timerStop(timer); // disable timer
           tone(b1, 500, 500); // Indicate time
           digitalWrite(r1l, LOW);
+          buzzed = false; // Exit buzzed state
+        }
+      }
+    case 2 :
+      // Red two
+      if (!timerOn){
+        startTimer(30, pixels.Color(25, 0, 0));// Start the 30 seccond countdown
+        
+        timerRestart(buzzTimer); // Set the buzzer timer to 0
+        timerStart(buzzTimer); // Make sure the buzzer timer is started
+        timerAlarmEnable(buzzTimer); // Run the buzzer timer to the alarm
+        digitalWrite(b2, HIGH); // Turn on the buzzer
+        digitalWrite(r2l, HIGH); // Turn on the red 1 light
+      } else { 
+        if (pixelsOn > isrCounter) { // Check if pixel needs to be turned off
+          pixelsOn--;
+          pixels.setPixelColor(pixelsOn, pixels.Color(0, 0, 0));
+          pixels.show();
+        } else if (pixelsOn == 0){ // After all the pixels are off (Times up)
+          
+          timerOn = false; // Timer is no longer running
+          timerStop(timer); // disable timer
+          tone(b1, 500, 500); // Indicate time
+          digitalWrite(r2l, LOW);
+          buzzed = false; // Exit buzzed state
+        }
+      }
+    case 3 :
+      // Red three
+      if (!timerOn){
+        startTimer(30, pixels.Color(25, 0, 0));// Start the 30 seccond countdown
+        
+        timerRestart(buzzTimer); // Set the buzzer timer to 0
+        timerStart(buzzTimer); // Make sure the buzzer timer is started
+        timerAlarmEnable(buzzTimer); // Run the buzzer timer to the alarm
+        digitalWrite(b2, HIGH); // Turn on the buzzer
+        digitalWrite(r3l, HIGH); // Turn on the red 1 light
+      } else { 
+        if (pixelsOn > isrCounter) { // Check if pixel needs to be turned off
+          pixelsOn--;
+          pixels.setPixelColor(pixelsOn, pixels.Color(0, 0, 0));
+          pixels.show();
+        } else if (pixelsOn == 0){ // After all the pixels are off (Times up)
+          
+          timerOn = false; // Timer is no longer running
+          timerStop(timer); // disable timer
+          tone(b1, 500, 500); // Indicate time
+          digitalWrite(r3l, LOW);
+          buzzed = false; // Exit buzzed state
+        }
+      }
+    case 4 :
+      // Yellow one
+      if (!timerOn){
+        startTimer(30, pixels.Color(25, 25, 0));// Start the 30 seccond countdown
+        
+        timerRestart(buzzTimer); // Set the buzzer timer to 0
+        timerStart(buzzTimer); // Make sure the buzzer timer is started
+        timerAlarmEnable(buzzTimer); // Run the buzzer timer to the alarm
+        digitalWrite(b2, HIGH); // Turn on the buzzer
+        digitalWrite(y1l, HIGH); // Turn on the red 1 light
+      } else { 
+        if (pixelsOn > isrCounter) { // Check if pixel needs to be turned off
+          pixelsOn--;
+          pixels.setPixelColor(pixelsOn, pixels.Color(0, 0, 0));
+          pixels.show();
+        } else if (pixelsOn == 0){ // After all the pixels are off (Times up)
+          
+          timerOn = false; // Timer is no longer running
+          timerStop(timer); // disable timer
+          tone(b1, 500, 500); // Indicate time
+          digitalWrite(y1l, LOW);
+          buzzed = false; // Exit buzzed state
+        }
+      }
+    case 5 :
+      // Yellow Two
+      if (!timerOn){
+        startTimer(30, pixels.Color(25, 25, 0));// Start the 30 seccond countdown
+        
+        timerRestart(buzzTimer); // Set the buzzer timer to 0
+        timerStart(buzzTimer); // Make sure the buzzer timer is started
+        timerAlarmEnable(buzzTimer); // Run the buzzer timer to the alarm
+        digitalWrite(b2, HIGH); // Turn on the buzzer
+        digitalWrite(y2l, HIGH); // Turn on the red 1 light
+      } else { 
+        if (pixelsOn > isrCounter) { // Check if pixel needs to be turned off
+          pixelsOn--;
+          pixels.setPixelColor(pixelsOn, pixels.Color(0, 0, 0));
+          pixels.show();
+        } else if (pixelsOn == 0){ // After all the pixels are off (Times up)
+          
+          timerOn = false; // Timer is no longer running
+          timerStop(timer); // disable timer
+          tone(b1, 500, 500); // Indicate time
+          digitalWrite(y2l, LOW);
+          buzzed = false; // Exit buzzed state
+        }
+      }
+    case 6 :
+      // Yellow Two
+      if (!timerOn){
+        startTimer(30, pixels.Color(25, 25, 0));// Start the 30 seccond countdown
+        
+        timerRestart(buzzTimer); // Set the buzzer timer to 0
+        timerStart(buzzTimer); // Make sure the buzzer timer is started
+        timerAlarmEnable(buzzTimer); // Run the buzzer timer to the alarm
+        digitalWrite(b2, HIGH); // Turn on the buzzer
+        digitalWrite(y3l, HIGH); // Turn on the red 1 light
+      } else { 
+        if (pixelsOn > isrCounter) { // Check if pixel needs to be turned off
+          pixelsOn--;
+          pixels.setPixelColor(pixelsOn, pixels.Color(0, 0, 0));
+          pixels.show();
+        } else if (pixelsOn == 0){ // After all the pixels are off (Times up)
+          
+          timerOn = false; // Timer is no longer running
+          timerStop(timer); // disable timer
+          tone(b1, 500, 500); // Indicate time
+          digitalWrite(y3l, LOW);
+          buzzed = false; // Exit buzzed state
         }
       }
   }
