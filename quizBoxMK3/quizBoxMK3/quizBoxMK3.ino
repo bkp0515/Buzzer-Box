@@ -213,6 +213,7 @@ void startTimer(uint8_t timeLenght, uint32_t color) { // Call to start a timer
     timerOn = true; // Set flag to show a timer is running
     timerAlarmWrite(timer, (timeLenght * 1000000 / NUMPIXELS), true); // Set the interrupt lenght of the timer
     timerRestart(timer); // Start the timer from 0
+    timerStart(timer);
     timerAlarmEnable(timer); // Allow timer interupt
     isrCounter = NUMPIXELS; // Set the counter to the number of pixels to begin countdown
     pixelsOn = NUMPIXELS; // Set the number of pixels currently on
