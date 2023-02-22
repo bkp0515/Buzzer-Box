@@ -46,6 +46,7 @@ uint8_t pixelsOn = 0;
 // Setup timer
 hw_timer_t * timer = NULL;
 hw_timer_t * speedTimer = NULL;
+hw_timer_t * buzzTimer = NULL;
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // End timer setup
@@ -186,7 +187,11 @@ void ARDUINO_ISR_ATTR speedTimerInt() {
 }
 
 
-
+void ARDUINO_ISR_ATTR buzzTimerInt() {
+  digitalWrite(b2, LOW);
+  timerStop(buzzTimer);
+  //buzzing = false;
+}
 ////////////////////////////////////////////////////////////////////////////////////////////
 // Timer Function Stuff
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -271,14 +276,22 @@ void setup() {
   pixels.clear();
   pixels.show();
   
-  // Initialize timer 0 and 1 with an 80 prescaler and define autoreload
+  // Initialize timer 0, 1 and 2 with an 80 prescaler and define autoreload
   timer = timerBegin(0, 80, true);
-  speedTimer = timerBegin(1, 80, false);
+  speedTimer = timerBegin(1, 80, true);
+  buzzTimer = timerBegin(2, 80, true);
+  
   // Attach the interrupt function to the timer
   timerAttachInterrupt(timer, &onTimer, true);
-  timerAttachInterrupt(speedTimer, &speedTimerInt, false);
+  timerAttachInterrupt(speedTimer, &speedTimerInt, true);
+  timerAttachInterrupt(buzzTimer, &buzzTimerInt, true);
 
+  
+  
+  
+  timerAlarmWrite(buzzTimer, 500000, false); // Set the buzzer timer limit
   timerAlarmWrite(speedTimer, 5000000, false); // Set the speed timer limit
+  
   
   //startTimer(5, pixels.Color(25, 25, 25));
 }
@@ -305,15 +318,23 @@ void buzz(uint8_t x) {
       // Red one
       if (!timerOn){
         startTimer(30, pixels.Color(25, 0, 0));// Start the 30 seccond countdown
+        
+        timerRestart(buzzTimer); // Set the buzzer timer to 0
+        timerStart(buzzTimer); // Make sure the buzzer timer is started
+        timerAlarmEnable(buzzTimer); // Run the buzzer timer to the alarm
+        digitalWrite(b2, HIGH); // Turn on the buzzer
+        digitalWrite(r1l, HIGH); // Turn on the red 1 light
       } else { 
         if (pixelsOn > isrCounter) { // Check if pixel needs to be turned off
           pixelsOn--;
           pixels.setPixelColor(pixelsOn, pixels.Color(0, 0, 0));
           pixels.show();
-        } else if (pixelsOn == 0){
-          buzzed = false;
-          timerOn = false;
-          timerStop(timer);
+        } else if (pixelsOn == 0){ // After all the pixels are off (Times up)
+          buzzed = false; // Exit buzzed state
+          timerOn = false; // Timer is no longer running
+          timerStop(timer); // disable timer
+          tone(b1, 500, 500); // Indicate time
+          digitalWrite(r1l, LOW);
         }
       }
   }
