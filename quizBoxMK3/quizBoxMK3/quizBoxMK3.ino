@@ -4,6 +4,7 @@
 // Library includes
 #include <Adafruit_NeoPixel.h>
 #include "driver/rtc_io.h"
+#include <FastLED.h>
 #ifdef __AVR__
 #include <avr/power.h>
 #endif
@@ -24,11 +25,12 @@
 // Neopixel Setup Stuff
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-#define neoPIN    19 //Set pin for neopixels
-#define NUMPIXELS 8  //Set number of neopixels
+#define DATA_PIN    19 //Set pin for neopixels
+#define NUM_LEDS    8  //Set number of neopixels
 
 // Input the neopixel variables
-Adafruit_NeoPixel pixels(NUMPIXELS, neoPIN, NEO_GRB + NEO_KHZ800);
+CRGB leds[NUM_LEDS];
+//Adafruit_NeoPixel pixels(NUMPIXELS, neoPIN, NEO_GRB + NEO_KHZ800);
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // End Neopixel Setup
@@ -204,23 +206,23 @@ void ARDUINO_ISR_ATTR onTimer() {
 }
 
 // Start timer function
-void startTimer(uint8_t timeLenght, uint32_t color) { // Call to start a timer
+void startTimer(uint8_t timeLenght, uint8_t R, uint8_t G, uint8_t B) { // Call to start a timer
   if (timerOn == false){ // Check if a timer is already started
     
     // Set all the pixels to the defined color
-    for(int j = 0; j<pixels.numPixels(); j++){ 
-      pixels.setPixelColor(j, color);
-      pixels.show();
+    for(int j = 0; j<NUM_LEDS; j++){ 
+      leds[j].setRGB( R, G, B);
+      FastLED.show();
     } // End for
 
     // Configure timer
     timerOn = true; // Set flag to show a timer is running
-    timerAlarmWrite(timer, (timeLenght * 1000000 / NUMPIXELS), true); // Set the interrupt lenght of the timer
+    timerAlarmWrite(timer, (timeLenght * 1000000 / NUM_LEDS), true); // Set the interrupt lenght of the timer
     timerRestart(timer); // Start the timer from 0
     timerStart(timer);
     timerAlarmEnable(timer); // Allow timer interupt
-    isrCounter = NUMPIXELS; // Set the counter to the number of pixels to begin countdown
-    pixelsOn = NUMPIXELS; // Set the number of pixels currently on
+    isrCounter = NUM_LEDS; // Set the counter to the number of pixels to begin countdown
+    pixelsOn = NUM_LEDS; // Set the number of pixels currently on
     
   } // end if
   
@@ -241,7 +243,8 @@ void setup() {
   esp_sleep_enable_ext0_wakeup(GPIO_NUM_26,1);
   
   // Start the neopixels
-  pixels.begin();
+  //pixels.begin();
+  FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
   // initialize buttons
   pinMode(r1p, INPUT_PULLUP);
   pinMode(r2p, INPUT_PULLUP);
@@ -272,8 +275,8 @@ void setup() {
   // Play tone to indicate power on
   tone(b1, 1500, 500);
   // Clear the neopixels
-  pixels.clear();
-  pixels.show();
+  //pixels.clear();
+  //pixels.show();
   
   // Initialize timer 0, 1 and 2 with an 80 prescaler and define autoreload
   timer = timerBegin(0, 80, true);
@@ -316,7 +319,7 @@ void buzz(uint8_t x) {
     case 1 :
       // Red one
       if (!timerOn){
-        startTimer(30, pixels.Color(25, 0, 0));// Start the 30 seccond countdown
+        startTimer(30, 25, 0, 0);// Start the 30 seccond countdown
         
         timerRestart(buzzTimer); // Set the buzzer timer to 0
         timerStart(buzzTimer); // Make sure the buzzer timer is started
@@ -326,8 +329,8 @@ void buzz(uint8_t x) {
       } else { 
         if (pixelsOn > isrCounter) { // Check if pixel needs to be turned off
           pixelsOn--;
-          pixels.setPixelColor(pixelsOn, pixels.Color(0, 0, 0));
-          pixels.show();
+          leds[pixelsOn].setRGB( 0, 0, 0);
+          FastLED.show();
         } else if (pixelsOn == 0){ // After all the pixels are off (Times up)
           
           timerOn = false; // Timer is no longer running
@@ -340,7 +343,7 @@ void buzz(uint8_t x) {
     case 2 :
       // Red two
       if (!timerOn){
-        startTimer(30, pixels.Color(25, 0, 0));// Start the 30 seccond countdown
+        startTimer(30, 25, 0, 0);// Start the 30 seccond countdown
         
         timerRestart(buzzTimer); // Set the buzzer timer to 0
         timerStart(buzzTimer); // Make sure the buzzer timer is started
@@ -350,8 +353,8 @@ void buzz(uint8_t x) {
       } else { 
         if (pixelsOn > isrCounter) { // Check if pixel needs to be turned off
           pixelsOn--;
-          pixels.setPixelColor(pixelsOn, pixels.Color(0, 0, 0));
-          pixels.show();
+          leds[pixelsOn].setRGB( 0, 0, 0);
+          FastLED.show();
         } else if (pixelsOn == 0){ // After all the pixels are off (Times up)
           
           timerOn = false; // Timer is no longer running
@@ -364,7 +367,7 @@ void buzz(uint8_t x) {
     case 3 :
       // Red three
       if (!timerOn){
-        startTimer(30, pixels.Color(25, 0, 0));// Start the 30 seccond countdown
+        startTimer(30, 25, 0, 0);// Start the 30 seccond countdown
         
         timerRestart(buzzTimer); // Set the buzzer timer to 0
         timerStart(buzzTimer); // Make sure the buzzer timer is started
@@ -374,8 +377,8 @@ void buzz(uint8_t x) {
       } else { 
         if (pixelsOn > isrCounter) { // Check if pixel needs to be turned off
           pixelsOn--;
-          pixels.setPixelColor(pixelsOn, pixels.Color(0, 0, 0));
-          pixels.show();
+          leds[pixelsOn].setRGB( 0, 0, 0);
+          FastLED.show();
         } else if (pixelsOn == 0){ // After all the pixels are off (Times up)
           
           timerOn = false; // Timer is no longer running
@@ -388,7 +391,7 @@ void buzz(uint8_t x) {
     case 4 :
       // Yellow one
       if (!timerOn){
-        startTimer(30, pixels.Color(25, 25, 0));// Start the 30 seccond countdown
+        startTimer(30, 25, 25, 0);// Start the 30 seccond countdown
         
         timerRestart(buzzTimer); // Set the buzzer timer to 0
         timerStart(buzzTimer); // Make sure the buzzer timer is started
@@ -398,8 +401,8 @@ void buzz(uint8_t x) {
       } else { 
         if (pixelsOn > isrCounter) { // Check if pixel needs to be turned off
           pixelsOn--;
-          pixels.setPixelColor(pixelsOn, pixels.Color(0, 0, 0));
-          pixels.show();
+          leds[pixelsOn].setRGB( 0, 0, 0);
+          FastLED.show();
         } else if (pixelsOn == 0){ // After all the pixels are off (Times up)
           
           timerOn = false; // Timer is no longer running
@@ -412,7 +415,7 @@ void buzz(uint8_t x) {
     case 5 :
       // Yellow Two
       if (!timerOn){
-        startTimer(30, pixels.Color(25, 25, 0));// Start the 30 seccond countdown
+        startTimer(30, 25, 25, 0);// Start the 30 seccond countdown
         
         timerRestart(buzzTimer); // Set the buzzer timer to 0
         timerStart(buzzTimer); // Make sure the buzzer timer is started
@@ -422,8 +425,8 @@ void buzz(uint8_t x) {
       } else { 
         if (pixelsOn > isrCounter) { // Check if pixel needs to be turned off
           pixelsOn--;
-          pixels.setPixelColor(pixelsOn, pixels.Color(0, 0, 0));
-          pixels.show();
+          leds[pixelsOn].setRGB( 0, 0, 0);
+          FastLED.show();
         } else if (pixelsOn == 0){ // After all the pixels are off (Times up)
           
           timerOn = false; // Timer is no longer running
@@ -436,7 +439,7 @@ void buzz(uint8_t x) {
     case 6 :
       // Yellow Two
       if (!timerOn){
-        startTimer(30, pixels.Color(25, 25, 0));// Start the 30 seccond countdown
+        startTimer(30, 25, 25, 0);// Start the 30 seccond countdown
         
         timerRestart(buzzTimer); // Set the buzzer timer to 0
         timerStart(buzzTimer); // Make sure the buzzer timer is started
@@ -446,8 +449,8 @@ void buzz(uint8_t x) {
       } else { 
         if (pixelsOn > isrCounter) { // Check if pixel needs to be turned off
           pixelsOn--;
-          pixels.setPixelColor(pixelsOn, pixels.Color(0, 0, 0));
-          pixels.show();
+          leds[pixelsOn].setRGB( 0, 0, 0);
+          FastLED.show();
         } else if (pixelsOn == 0){ // After all the pixels are off (Times up)
           
           timerOn = false; // Timer is no longer running
