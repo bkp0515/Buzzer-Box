@@ -1,0 +1,18 @@
+(footprint "0207_12" (version 20211014) (generator pcbnew)
+  (layer "F.Cu")
+  (tedit 0)
+  (fp_text reference "BLUE0" (at 0 0 180) (layer "F.SilkS") hide
+    (effects (font (size 1.27 1.27) (thickness 0.15)))
+    (tstamp 2bab3b7d-9559-4f39-a239-b1301334472e)
+  )
+  (fp_text value "1kΩ" (at 0 0 180) (layer "F.Fab") hide
+    (effects (font (size 1.27 1.27) (thickness 0.15)))
+    (tstamp ef7e8c7b-8fab-4da5-a72f-57880f86b944)
+  )
+  (pad "1" thru_hole roundrect (at -3.81 0) (size 2.54 2.54) (drill 0.8128) (layers *.Cu *.Mask) (roundrect_rratio 0.25)
+    (chamfer_ratio 0.2928932188) (chamfer top_left top_right bottom_left bottom_right)
+    (solder_mask_margin 0.1016) (tstamp 5d4da402-48c2-474d-896d-c3809e32e747))
+  (pad "2" thru_hole roundrect (at 3.81 0) (size 2.54 2.54) (drill 0.8128) (layers *.Cu *.Mask) (roundrect_rratio 0.25)
+    (chamfer_ratio 0.2928932188) (chamfer top_left top_right bottom_left bottom_right)
+    (solder_mask_margin 0.1016) (tstamp 2df2581f-91c6-4b60-800b-f028ce86a130))
+)

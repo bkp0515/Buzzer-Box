@@ -1,0 +1,18 @@
+(footprint "2HEADER" (version 20211014) (generator pcbnew)
+  (layer "F.Cu")
+  (tedit 0)
+  (fp_text reference "PWR0" (at 0 0) (layer "F.SilkS") hide
+    (effects (font (size 1.27 1.27) (thickness 0.15)) (justify right top))
+    (tstamp 5e8a3c0c-d794-4759-b77f-8ad8a7acc2a5)
+  )
+  (fp_text value "2POS_HEADERJUMPER" (at 0 0) (layer "F.Fab") hide
+    (effects (font (size 1.27 1.27) (thickness 0.15)) (justify right top))
+    (tstamp dff4a276-ee76-4b57-a943-bbb5eab9b176)
+  )
+  (pad "P$1" thru_hole roundrect (at -1.27 0) (size 1.6764 1.6764) (drill 0.8) (layers *.Cu *.Mask) (roundrect_rratio 0.25)
+    (chamfer_ratio 0.2928932188) (chamfer top_left top_right bottom_left bottom_right)
+    (solder_mask_margin 0.1016) (tstamp bbb7cd06-d074-44b7-8901-d4a2e55397c5))
+  (pad "P$2" thru_hole roundrect (at 1.27 0) (size 1.6764 1.6764) (drill 0.8) (layers *.Cu *.Mask) (roundrect_rratio 0.25)
+    (chamfer_ratio 0.2928932188) (chamfer top_left top_right bottom_left bottom_right)
+    (solder_mask_margin 0.1016) (tstamp 84380781-a944-4dae-bb4f-842221883300))
+)
